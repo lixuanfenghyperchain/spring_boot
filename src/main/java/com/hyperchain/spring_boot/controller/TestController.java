@@ -10,6 +10,7 @@
  */
 package com.hyperchain.spring_boot.controller;
 
+import com.hyperchain.spring_boot.aop.annotation.UserAccess;
 import com.hyperchain.spring_boot.vo.BaseResult;
 import com.hyperchain.spring_boot.vo.MyProperty;
 import io.swagger.annotations.Api;
@@ -49,18 +50,22 @@ public class TestController {
 
     @RequestMapping(value = "/hello", method = RequestMethod.POST)
     @ApiOperation(value = "你好 spring_boot", notes = "你好 spring_boot")
+    @UserAccess(desc = "hello_annotation")
     public String hello(
-            @ApiParam(value = "输入参数", required = false) String string) {
+            @ApiParam(value = "输入参数", required = false) String string,
+            @ApiParam(value = "name", required = false) String name,
+            @ApiParam(value = "age", required = false) String age) {
+        System.out.println("进入方法");
         return "hello spring_boot";
     }
 
-    @RequestMapping(value = "/getServerPort",method = RequestMethod.POST)
+    @RequestMapping(value = "/getServerPort", method = RequestMethod.POST)
     public String getConfig() {
         return server_port + "=============" + environment.getProperty("auth");
 
     }
 
-    @RequestMapping(value = "/getBaseResult",method = RequestMethod.POST)
+    @RequestMapping(value = "/getBaseResult", method = RequestMethod.POST)
     public BaseResult getBaseResult() {
         BaseResult baseResult = new BaseResult();
         List<String> listString = new ArrayList<String>();
@@ -78,7 +83,7 @@ public class TestController {
     @Autowired
     private MyProperty myProperty;
 
-    @RequestMapping(value = "/getMyConfig",method = RequestMethod.POST)
+    @RequestMapping(value = "/getMyConfig", method = RequestMethod.POST)
     public String getMyConfig() {
         return myProperty.getAge() + "======" + myProperty.getName();
     }

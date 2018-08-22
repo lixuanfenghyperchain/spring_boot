@@ -1,8 +1,8 @@
 /**
  * Copyright (C), 2016-2018, 趣链科技有限有限公司
- * FileName: Book
+ * FileName: UserInfo
  * Author:   lixuanfeng
- * Date:     2018/8/7 下午4:17
+ * Date:     2018/8/7 下午3:25
  * Description:
  * History:
  * <author>          <time>          <version>          <desc>
@@ -15,10 +15,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -28,16 +28,34 @@ import javax.persistence.Id;
  * @create 2018/8/7
  * @since 1.0.0
  */
+@Entity
+@Table(name = "tb_user")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Book {
+public class UserInfo {
     @Id
     @GeneratedValue(generator = "id_uuid")
     @GenericGenerator(name = "id_uuid", strategy = "uuid")
-    @Column(length = 40)
-    private String id;
+    private String userId;
     private String name;
+    private int age;
+    private String sex;
+    private String email;
 
+    // 与 Address 的关联
+    private String addressId;
+
+
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "userId='" + userId + '\'' +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", sex='" + sex + '\'' +
+                ", email='" + email + '\'' +
+                ", addressId='" + addressId + '\'' +
+                '}';
+    }
 }

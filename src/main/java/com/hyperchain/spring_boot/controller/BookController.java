@@ -2,7 +2,7 @@
  * Copyright (C), 2016-2018, 趣链科技有限有限公司
  * FileName: BookController
  * Author:   lixuanfeng
- * Date:     2018/7/15 下午9:06
+ * Date:     2018/8/7 下午6:45
  * Description:
  * History:
  * <author>          <time>          <version>          <desc>
@@ -10,37 +10,39 @@
  */
 package com.hyperchain.spring_boot.controller;
 
-import com.hyperchain.spring_boot.dao.BookDao;
-import com.hyperchain.spring_boot.entitiy.Book;
-import com.hyperchain.spring_boot.vo.BaseResult;
-import io.swagger.annotations.Api;
+import com.hyperchain.spring_boot.dao.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 〈一句话功能简述〉<br>
  * 〈〉
  *
  * @author lixuanfeng
- * @create 2018/7/15
+ * @create 2018/8/7
  * @since 1.0.0
  */
 @RestController
 @RequestMapping(value = "/book")
-@Api
 public class BookController {
     @Autowired
-    private BookDao bookDao;
+    private BookRepository bookRepository;
 
-    @RequestMapping("/getAllBooks")
-    public BaseResult getAllBooks() {
-        List<Book> allBook = bookDao.findAll();
-        BaseResult baseResult = new BaseResult();
-        baseResult.setData(allBook);
-        return baseResult;
+    @RequestMapping(value = "/pageBook", method = RequestMethod.POST)
+    List<Map> pageBook() {
+        return bookRepository.findByNameContaining("Spring%");
     }
 
+    @RequestMapping(value = "/findById", method = RequestMethod.POST)
+    Map findById() {
+        Map bookById = bookRepository.findBookById("2c90e5286513be21016513be3b870002");
+        System.out.println(bookById);
+        return bookById;
+
+    }
 }

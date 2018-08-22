@@ -34,7 +34,7 @@ public class Swagger2 {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.hyperchain.spring_boot.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.hyperchain.spring_boot.controller"))  //这里注意路径别写错了
                 .paths(PathSelectors.any())
                 .build()
                 .globalOperationParameters(pars);

@@ -1,8 +1,8 @@
 /**
  * Copyright (C), 2016-2018, 趣链科技有限有限公司
- * FileName: Book
+ * FileName: BookAuthor
  * Author:   lixuanfeng
- * Date:     2018/8/7 下午4:17
+ * Date:     2018/8/7 下午4:20
  * Description:
  * History:
  * <author>          <time>          <version>          <desc>
@@ -13,12 +13,8 @@ package com.hyperchain.spring_boot.entitiy;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -28,16 +24,23 @@ import javax.persistence.Id;
  * @create 2018/8/7
  * @since 1.0.0
  */
-@Data
+@Entity
+@Table(name = "book_author")
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Book {
+@Data
+//联合主键
+@IdClass(BookAuthorPK.class)
+public class BookAuthor {
+
+
     @Id
-    @GeneratedValue(generator = "id_uuid")
-    @GenericGenerator(name = "id_uuid", strategy = "uuid")
     @Column(length = 40)
-    private String id;
-    private String name;
+    private String bookId;
+
+    @Id
+    @Column(length = 40)
+    private String authorId;
+
 
 }

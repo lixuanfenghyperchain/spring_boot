@@ -1,8 +1,8 @@
 /**
  * Copyright (C), 2016-2018, 趣链科技有限有限公司
- * FileName: Book
+ * FileName: Address
  * Author:   lixuanfeng
- * Date:     2018/8/7 下午4:17
+ * Date:     2018/8/7 下午3:21
  * Description:
  * History:
  * <author>          <time>          <version>          <desc>
@@ -15,10 +15,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -28,16 +28,33 @@ import javax.persistence.Id;
  * @create 2018/8/7
  * @since 1.0.0
  */
-@Data
+@Entity
+@Table(name = "tb_address")
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Book {
+@Data
+public class Address {
     @Id
     @GeneratedValue(generator = "id_uuid")
     @GenericGenerator(name = "id_uuid", strategy = "uuid")
-    @Column(length = 40)
-    private String id;
-    private String name;
+    private String addressId;
+    private String areaCode;
+    private String country;
+    private String province;
+    private String city;
+    private String area;
+    private String detailAddress;
 
+    @Override
+    public String toString() {
+        return "Address{" +
+                "addressId='" + addressId + '\'' +
+                ", areaCode='" + areaCode + '\'' +
+                ", country='" + country + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", area='" + area + '\'' +
+                ", detailAddress='" + detailAddress + '\'' +
+                '}';
+    }
 }
