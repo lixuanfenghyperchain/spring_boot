@@ -11,6 +11,8 @@
 package com.hyperchain.spring_boot.controller;
 
 import com.hyperchain.spring_boot.dao.BookRepository;
+import com.hyperchain.spring_boot.dao.mapper.BookMapper;
+import com.hyperchain.spring_boot.entitiy.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,6 +34,8 @@ import java.util.Map;
 public class BookController {
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private BookMapper bookMapper;
 
     @RequestMapping(value = "/pageBook", method = RequestMethod.POST)
     List<Map> pageBook() {
@@ -45,4 +49,11 @@ public class BookController {
         return bookById;
 
     }
+
+    @RequestMapping(value = "/getBookByName", method = RequestMethod.POST)
+    Book findBookByName() {
+        Book book = bookMapper.findBookrByName("Spring Boot in Action");
+        return book;
+    }
+
 }

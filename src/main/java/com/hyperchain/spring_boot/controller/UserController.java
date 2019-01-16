@@ -13,11 +13,13 @@ package com.hyperchain.spring_boot.controller;
 import com.hyperchain.spring_boot.config.interceptors.MyTokenArgumentResolver;
 import com.hyperchain.spring_boot.model.UserAdd;
 import com.hyperchain.spring_boot.vo.BaseResult;
+import com.sun.deploy.net.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -66,6 +68,21 @@ public class UserController {
                             @RequestParam @Email(message = "邮箱格式有误") String email) {
         BaseResult baseResult = new BaseResult();
 
+        return baseResult;
+    }
+
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @Valid
+    public BaseResult user(String confirm_passWord, String new_passWord, String old_passWord, HttpServletResponse response) {
+        System.out.println(response);
+        // 允许跨域访问的域名：若有端口需写全（协议+域名+端口），若没有端口末尾不用加'/'
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        System.out.println(confirm_passWord);
+        System.out.println(old_passWord);
+        System.out.println(new_passWord);
+        BaseResult baseResult = new BaseResult();
+        baseResult.setMessage("ok");
+        baseResult.setCode(1);
         return baseResult;
     }
 

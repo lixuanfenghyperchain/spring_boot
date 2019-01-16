@@ -10,11 +10,14 @@
  */
 package com.hyperchain.spring_boot.config.interceptors;
 
+import com.hyperchain.spring_boot.business.constant.BaseConstant;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -30,7 +33,8 @@ import java.util.List;
 //2.0 版本 webMvcConfigureaAdapter 过时
 @Configuration
 public class MyAdapter extends WebMvcConfigurerAdapter {
-
+    @Value("${file.uploadUrl}")
+    private String file_uploadUrl;
     /**
      * 拦截器 的配置
      *
@@ -75,8 +79,16 @@ public class MyAdapter extends WebMvcConfigurerAdapter {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/images/**")//映射之后能访问的路径
-                .addResourceLocations("file:/Users/lixuanfeng/Desktop/testSource/");//资源原始路径  第一次测试不行 是没有加 file：
+ //       registry.addResourceHandler("/upload/**")//映射之后能访问的路径
+   //             .addResourceLocations("file:/Users/lixuanfeng/Desktop/testSource/upload/");//资源原始路径  第一次测试不行 是没有加 file：
+        //文件存储路径映射
+        registry.addResourceHandler(File.separator + File.separator + BaseConstant.FOLDER_UPLOAD + "/**").
+//                addResourceLocations("classpath:/META-INF/resources/").
+//                addResourceLocations("classpath:/resources/").
+//                addResourceLocations("classpath:/public/").
+        addResourceLocations("file:" + file_uploadUrl + File.separator + File.separator + BaseConstant.FOLDER_UPLOAD + File.separator + File.separator);
+
+
         super.addResourceHandlers(registry);
     }
 }

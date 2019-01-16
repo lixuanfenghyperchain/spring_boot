@@ -10,6 +10,7 @@
  */
 package com.hyperchain.spring_boot.controller;
 
+import com.hyperchain.spring_boot.aop.annotation.Permission;
 import com.hyperchain.spring_boot.aop.annotation.UserAccess;
 import com.hyperchain.spring_boot.vo.BaseResult;
 import com.hyperchain.spring_boot.vo.MyProperty;
@@ -78,6 +79,18 @@ public class TestController {
         return baseResult;
 
     }
+
+    @RequestMapping(value = "/testAnnotation", method = RequestMethod.POST)
+    @Permission(value = "22")
+    public BaseResult testAnnotation(String name, String age) {
+        System.out.println(name + age);
+        BaseResult baseResult = new BaseResult();
+        return baseResult;
+    }
+
+
+
+
 
     //获取自定义配置文件的值
     @Autowired

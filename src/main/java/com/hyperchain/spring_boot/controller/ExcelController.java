@@ -12,10 +12,17 @@ package com.hyperchain.spring_boot.controller;
 
 import com.hyperchain.spring_boot.component.excel.ExcelUtil;
 import com.hyperchain.spring_boot.component.excel.Person;
+import com.hyperchain.spring_boot.service.FileService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +37,14 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/excel")
 public class ExcelController {
-    @RequestMapping("/export")
+
+    @Value("${file.uploadUrl}")
+    private String file_uploadUrl;
+
+    @Autowired
+    private FileService fileService;
+
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
     public void export(HttpServletResponse response) {
 
         //模拟从数据库获取需要导出的数据
@@ -47,11 +61,20 @@ public class ExcelController {
         ExcelUtil.exportExcel(personList, "花名册", "草帽一伙", Person.class, "海贼王.xls", response);
     }
 
-    @RequestMapping("/importExcel")
-    public void importExcel() {
-        String filePath = "/Users/lixuanfeng/Desktop/海贼王.xls";
+    @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
+    public void importExcel(MultipartFile multipartFile, HttpServletRequest request) {
+
+        String filePath = fileService.uploadFile(multipartFile, request);
+
+        filePath = file_uploadUrl + File.separator + filePath;
+
+        //这里的目录是写死的，所以需要先把文件上传至服务器再做excel导入功能。
+//        String filePath = "/Users/lixuanfeng/Desktop/海贼王.xls";
         //解析excel，
         List<Person> personList = ExcelUtil.importExcel(filePath, 1, 1, Person.class);
+        for (Person p : personList) {
+            System.out.println(p.toString());
+        }
         //也可以使用MultipartFile,使用 FileUtil.importExcel(MultipartFile file, Integer titleRows, Integer headerRows, Class<T> pojoClass)导入
         System.out.println("导入数据一共【" + personList.size() + "】行");
 
