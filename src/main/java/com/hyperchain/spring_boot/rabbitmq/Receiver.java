@@ -32,7 +32,7 @@ public class Receiver {
             ConnectionFactory factory = new ConnectionFactory();
             factory.setHost("192.168.225.138");
             factory.setPort(5672);
-            factory.setUsername("test");
+            factory.setUsername("fdfs");
             factory.setPassword("123456");
             factory.setVirtualHost("testV");
             connection = factory.newConnection();

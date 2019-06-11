@@ -27,7 +27,7 @@ public class Test {
      * @param args
      */
     public static void main(String[] args) {
-        System.out.println("test exception");
+        System.out.println("fdfs exception");
         try {
             throw new RuntimeException("exception");
         } catch (RuntimeException rx) {

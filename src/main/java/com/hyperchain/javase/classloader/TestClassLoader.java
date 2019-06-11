@@ -10,6 +10,11 @@
  */
 package com.hyperchain.javase.classloader;
 
+import cn.hyperchain.sdk.rpc.HyperchainAPI;
+import sun.misc.Launcher;
+import sun.rmi.rmic.iiop.ClassPathLoader;
+import sun.tools.java.ClassPath;
+
 /**
  * 〈一句话功能简述〉<br>
  * 〈〉
@@ -21,7 +26,10 @@ package com.hyperchain.javase.classloader;
 public class TestClassLoader {
 
     public static void main(String[] args) {
-        ClassLoader c = TestClassLoader.class.getClassLoader();
+        ClassLoader c1 = TestClassLoader.class.getClassLoader();
+
+        System.out.println(HyperchainAPI.class.getClassLoader());
+//        Launcher
 
 //        ==============sun.misc.Launcher$AppClassLoader@18b4aac2
 //        ==============sun.misc.Launcher$ExtClassLoader@26a1ab54   扩展类加载器  ext 下的jar
@@ -35,10 +43,40 @@ public class TestClassLoader {
         //  双亲委派   安全机制
 
 
-        while (c != null) {
-            System.out.println("==============" + c);
-            c = c.getParent();
+//        while (c != null) {
+//            System.out.println("==============" + c);
+//            c = c.getParent();
+//        }
+
+        Person p = new Person("张三");
+        System.out.println(p.getClass().getClassLoader());
+
+
+        ClassLoader c = new ClassPathLoader(new ClassPath(""));
+        try {
+            Class<?> aClass = c.loadClass("com.hyperchain.javase.classloader.Person");
+            System.out.println(aClass.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
+
+}
+
+
+class Person {
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Person(String name) {
+        this.name = name;
+    }
 }

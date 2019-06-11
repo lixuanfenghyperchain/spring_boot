@@ -32,7 +32,7 @@ public class RabbitMQServer {
             ConnectionFactory factory = new ConnectionFactory();
             factory.setHost("192.168.225.138");
             factory.setPort(5672);
-            factory.setUsername("test");
+            factory.setUsername("fdfs");
             factory.setPassword("123456");
             factory.setVirtualHost("testV");
             //创建与RabbitMQ服务器的TCP连接

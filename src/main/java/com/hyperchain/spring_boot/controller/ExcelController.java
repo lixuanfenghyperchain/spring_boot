@@ -10,9 +10,9 @@
  */
 package com.hyperchain.spring_boot.controller;
 
-import com.hyperchain.spring_boot.component.excel.ExcelUtil;
-import com.hyperchain.spring_boot.component.excel.Person;
+import com.hyperchain.spring_boot.excel.Person;
 import com.hyperchain.spring_boot.service.FileService;
+import com.hyperchain.spring_boot.utils.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
