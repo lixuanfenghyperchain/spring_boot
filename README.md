@@ -94,3 +94,30 @@ import org.slf4j.LoggerFactory;
 ```
 java  -jar  xx.jar  --server.port=9090
 ```
+### 13、基于Docker的部署
+```
+1、把项目打成jar包传到安装了docker的服务器上。
+2、编写Dockerfile文件，与jar包放在同级目录。
+FROM java:8
+MAINTAINER LXF
+ADD spring_boot-0.0.1-SNAPSHOT.jar  app.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/app.jar"]
+3、编译镜像
+docker build -t wisely/ch10docker .
+如果报错：docker报错Get https://registry-1.docker.io/v2/: x509: certificate has expired or is not yet valid
+同步时间即可：
+yum install -y ntp
+ntpdate cn.pool.ntp.org   
+推荐几个时间服务器：
+          time.nist.gov
+          time.nuri.net
+          asia.pool.ntp.org
+          asia.pool.ntp.org
+          asia.pool.ntp.org
+          asia.pool.ntp.org
+4、查看本地镜像
+docker images
+5、运行镜像
+docker run -d -name ch10  -p 8080:8080 wisely/ch10docker
+```
