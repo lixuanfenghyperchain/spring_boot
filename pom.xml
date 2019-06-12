@@ -56,6 +56,10 @@
                 <!--<configuration>-->
                 <!--<fork>true</fork>-->
                 <!--</configuration>-->
+               <!--加入以下配置 可以直接./yourapp.jar 来启动-->
+                <configuration>
+                    <executable>true</executable>
+                </configuration>
             </plugin>
         </plugins>
     </build>

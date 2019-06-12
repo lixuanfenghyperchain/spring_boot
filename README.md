@@ -121,3 +121,74 @@ docker images
 5、运行镜像
 docker run -d -name ch10  -p 8080:8080 wisely/ch10docker
 ```
+### 14、springBoot jar包部署
+```
+1、cd 项目跟目录（和pom.xml同级）
+mvn clean package
+## 或者执行下面的命令
+## 排除测试代码后进行打包
+mvn clean package  -Dmaven.test.skip=true
+2、打包完成后 jar 包会生成到 target 目录下，命名一般是 项目名+版本号.jar
+java -jar  target/spring-boot-scheduler-1.0.0.jar   这种方式，只要控制台关闭，服务就不能访问了
+nohup java -jar target/spring-boot-scheduler-1.0.0.jar &
+java -jar app.jar --spring.profiles.active=dev  启动时选取不同的配置文件
+java -Xms10m -Xmx80m -jar app.jar &   设置jvm参数
+```
+### 15、springBoot war包部署
+```
+1、maven 项目，修改 pom 包
+<packaging>war</packaging>
+2、打包时排除tomcat
+dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-tomcat</artifactId>
+	<scope>provided</scope>
+</dependency>
+3、注册启动类
+创建 ServletInitializer.java，继承 SpringBootServletInitializer ，覆盖 configure()，把启动类 Application 注册进去。
+外部 Web 应用服务器构建 Web Application Context 的时候，会把启动类添加进去。
+public class ServletInitializer extends SpringBootServletInitializer {
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(Application.class);
+    }
+}
+4、打包
+mvn clean package  -Dmaven.test.skip=true
+5、放到tomcat的webapp中运行即可。
+```
+### 16、查看JVM参数值
+```
+jinfo -flags pid(进程号)
+-XX:CICompilerCount=2  最大的并行编译数
+-XX:InitialHeapSize=16777216 指定 JVM 的最大堆内存大小
+-XX:MaxHeapSize=257949696    指定 JVM 的初始堆内存大小
+-XX:MaxNewSize=85983232 
+-XX:MinHeapDeltaBytes=196608 
+-XX:NewSize=5570560 
+-XX:OldSize=11206656
+-XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:+UseFastUnorderedTimeStamps
+```
+### 17、通过./xxx.jar启动项目
+```
+1、maven,需要包含以下的配置
+<plugin>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-maven-plugin</artifactId>
+    <configuration>
+        <executable>true</executable>
+    </configuration>
+</plugin>
+2、打包 mvn clean package -Dmaven.skip.test=true
+3、可以直接./yourapp.jar 来启动
+4、注册为服务，做一个软链接指向你的jar包并加入到init.d中，然后用命令来启动。
+ln -s /var/yourapp/yourapp.jar /etc/init.d/yourapp
+chmod +x /etc/init.d/yourapp
+5、stop或者是restart命令去管理你的应用。
+/etc/init.d/yourapp start|stop|restart
+或者：service yourapp start|stop|restart
+```
