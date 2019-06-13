@@ -4,10 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
 //@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @SpringBootApplication
-//@EnableScheduling
+//@EnableScheduling     //开启定时任务
+@EnableCaching          //开启缓存
 public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 

@@ -10,6 +10,7 @@
  */
 package com.hyperchain.controller;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hyperchain.base.WMap;
 import com.hyperchain.base.exception.BusinessException;
 import com.hyperchain.base.response.BaseResponse;
@@ -21,6 +22,8 @@ import com.hyperchain.vo.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +45,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/v1")
+@CacheConfig(cacheNames = "baseCache")
 public class OrderController {
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
     @Autowired
@@ -48,6 +53,9 @@ public class OrderController {
 
     @Autowired
     private GirlDao girlDao;
+
+    @Autowired
+    private Order order;
 
     @RequestMapping("/girl/{girlId}")
     public Girl findGirl(@PathVariable("girlId") Integer girlId) {
@@ -69,7 +77,7 @@ public class OrderController {
     @RequestMapping("/findGirlById")
     public BaseResponse findGirlById() {
 //        return girlDao.findGirlById("44");
-        return BaseResponse.success(ResponseCode.SUCCESS, new Order());
+        return BaseResponse.success(ResponseCode.SUCCESS, girlRepository.findGirlById(44));
     }
 
 
@@ -93,5 +101,25 @@ public class OrderController {
             throw new BusinessException(ResponseCode.USER_NOT_EXIT);
         }
         return BaseResponse.success(ResponseCode.SUCCESS, "你好");
+    }
+
+    @RequestMapping("/testCache")
+//    @Cacheable
+    public BaseResponse testCache() {
+        Order order = new Order();
+        order.setOrderId("22");
+        order.setAddress("sichuan");
+        order.setName("lxf");
+        order.setDate("2019-06-10");
+        System.out.println("hh");
+        System.out.println(this.order);
+//{"code":"000000","message":"成功","data":"Order{orderId='null', address='null', name='null', date='null'}"}
+        return BaseResponse.success(ResponseCode.SUCCESS, girlRepository.findGirlById(22));
+    }
+
+
+    public static void main(String[] args) {
+        System.out.println(System.getProperty("java.io.tmpdir"));
+        System.out.println(System.getProperty("user.dir"));
     }
 }

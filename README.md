@@ -218,7 +218,7 @@ chmod +x /etc/init.d/yourapp
 
 ### 22、springBoot全局异常处理
 ```
-1、创建全局异常处理类：GlobalException 在类上加上注解 @RestControllerAdvice
+1、创建全局异常处理类：GlobalException.java 在类上加上注解 @RestControllerAdvice  //是 controller 的一个辅助类，最常用的就是作为全局异常处理的切面类
 2、创建具体的需要捕获的异常方法：handleBusinessException(BusinessException be) ,在方法上加入注解。
      @ResponseBody
         @ExceptionHandler(BusinessException.class)
@@ -227,7 +227,106 @@ chmod +x /etc/init.d/yourapp
             BaseResponse fail = BaseResponse.fail(be.getErrorCode(), be.getMsg());
             return fail;
         }   
+        
+ 列子：
+ @ControllerAdvice
+ public class GlobalException {
+ 	@ExceptionHandler(RuntimeException.class)
+ 	@ResponseBody
+ 	public Map<String, Object> exceptionHandler() {
+ 		Map<String, Object> map = new HashMap<String, Object>();
+ 		map.put("errorCode", "101");
+ 		map.put("errorMsg", "系統错误!");
+ 		return map;
+ 	}
+ }       
 ```
+
+
+### 23、springBoot开启缓存
+```
+1、pom文件引入
+   <dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-cache</artifactId>
+   </dependency>
+2、新建ehcache.xml 文件 放在classpath目录 maven的resources目录 
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+	updateCheck="false">
+	<!--
+            磁盘存储:将缓存中暂时不使用的对象,转移到硬盘,类似于Windows系统的虚拟内存
+            path:指定在硬盘上存储对象的路径
+            path可以配置的目录有：
+                user.home（用户的家目录）
+                user.dir（用户当前的工作目录）
+                java.io.tmpdir（默认的临时目录）
+                ehcache.disk.store.dir（ehcache的配置目录）
+                绝对路径（如：d:\\ehcache）
+            查看路径方法：String tmpDir = System.getProperty("java.io.tmpdir");
+         -->
+	<diskStore path="java.io.tmpdir/Tmp_EhCache" />
+	<!-- 默认配置 -->
+	<!--
+            defaultCache:默认的缓存配置信息,如果不加特殊说明,则所有对象按照此配置项处理
+            maxElementsInMemory:设置了缓存的上限,最多存储多少个记录对象
+            eternal:代表对象是否永不过期 (指定true则下面两项配置需为0无限期)
+            timeToIdleSeconds:最大的发呆时间 /秒
+            timeToLiveSeconds:最大的存活时间 /秒
+            overflowToDisk:是否允许对象被写入到磁盘
+            说明：下列配置自缓存建立起600秒(10分钟)有效 。
+            在有效的600秒(10分钟)内，如果连续120秒(2分钟)未访问缓存，则缓存失效。
+            就算有访问，也只会存活600秒。
+         -->
+	<defaultCache maxElementsInMemory="5000" eternal="false"
+		timeToIdleSeconds="120" timeToLiveSeconds="120"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="false" />
+	<cache name="baseCache" maxElementsInMemory="10000"
+		maxElementsOnDisk="100000" />
+</ehcache>
+3、代码使用Cacheable
+@CacheConfig(cacheNames = "baseCache")  //这里的名字跟配置文件的一致
+public interface UserMapper {
+	@Select("select * from users where name=#{name}")
+	@Cacheable
+	UserEntity findName(@Param("name") String name);
+}
+4、清除缓存
+在某个Controller中加入以下代码，可通过调用接口清除缓存
+@Autowired
+private CacheManager cacheManager;
+@RequestMapping("/remoKey")
+public void remoKey() {
+	cacheManager.getCache("baseCache").clear();
+}
+5、启动类开启缓存
+@EnableCaching // 开启缓存注解
+6、效果解释
+ @RequestMapping("/testCache")
+    @Cacheable
+    public String testCache() {
+        System.out.println("hh");
+        return "hh";
+    }
+ 我在controller中写了一个方法加上缓存注解，注意类上也要加上相应的注解，执行第二遍的时候，testCache（)方法直接不执行了，都不打印"hh"了，直接返回缓存中的数据。
+7、再学一招：如果应用集群部署环境，我们一般都是使用redis作为缓存服务器
+先从redis中查找数据，如果不存在则从数据库中查询，这里就会引入缓存击穿、缓存雪崩等问题。
+```
+
+### 24、springBoot静态资源访问
+```
+Spring Boot默认提供静态资源目录位置需置于classpath下，目录名需符合如下规则：
+    /static
+    /public
+    /resources	
+    /META-INF/resources
+举例：我们可以在src/main/resources/目录下创建static，在该位置放置一个图片文件。启动程序后，尝试访问http://localhost:8080/D.jpg。如能显示图片，配置成功。
+```
+
+
+
+
 
 
 未完待续。。。

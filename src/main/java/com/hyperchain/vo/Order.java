@@ -10,6 +10,10 @@
  */
 package com.hyperchain.vo;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -20,7 +24,8 @@ import java.util.Objects;
  * @create 2019/6/12
  * @since 1.0.0
  */
-public class Order {
+@Configuration
+public class Order implements Serializable {
 
     private String orderId;
     private String address;
@@ -85,4 +90,10 @@ public class Order {
 
         return Objects.hash(getOrderId(), getAddress(), getName(), getDate());
     }
+
+    @Bean
+    public Order instanceBean() {
+        return new Order();
+    }
+
 }
