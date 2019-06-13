@@ -15,6 +15,7 @@ import com.hyperchain.vo.PropertyVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,6 +34,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/hello")
 public class HelloController {
 
+
+    JdbcTemplate jdbcTemplate;
     private static final Logger logger = LoggerFactory.getLogger(HelloController.class);
     @Autowired
     private PropertyVo propertyVo;
@@ -56,16 +59,18 @@ public class HelloController {
      */
     @RequestMapping(value = "/order/{orderId}", method = RequestMethod.GET)
     public Order findOrder(@PathVariable("orderId") String orderId) {
+        //通过实体类获取配置文件的值
         Order order = new Order();
         order.setOrderId(orderId);
-        order.setName("李玄风1221");
-        order.setOrderAddr("四川广安");
-        order.setOrderDate("2019-06-11");
-        //通过实体类获取配置文件的值
+        order.setName("李玄风");
+        order.setAddress("四川广安");
         logger.info("INFO 日志" + propertyVo.getName());
         //日志级别可以直接在配置文件中配置不同包的不同日志级别
         logger.error("DEBUG 日志" + propertyVo.getName());
         return order;
     }
+
+
+
 
 }

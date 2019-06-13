@@ -20,7 +20,7 @@ new SpringApplicationBuilder(Application.class).properties("spring.config.locati
 ```
 ### 4、允许时指定profiles配置
 ```
-定义多个不同的profiles，不同的profiles之间用---（只适合yml配置文件）进行分割，在spring容器启动时，使用spring.profiles.active来指定激活那个profiles。
+定义多个不同的profiles，yml的profiles可以用---（只适合yml配置文件）进行分割，properties配置文件需要编写多份区分，（-dev.properties、-test.properties等）在spring容器启动时，使用spring.profiles.active来指定激活那个profiles。
 ```
 ### 5、Profiles实现多环境下配置切换
 ```
@@ -191,4 +191,56 @@ chmod +x /etc/init.d/yourapp
 5、stop或者是restart命令去管理你的应用。
 /etc/init.d/yourapp start|stop|restart
 或者：service yourapp start|stop|restart
+```
+### 18、springBoot启动完成之后初始化资源
+```
+1、直接创建一个类继承 CommandLineRunner ，并实现它的 run() 方法。
+2、在类中加上注解
+       @Component
+       @Order(1)  确保初始化的顺序，越小越先执行。
+```
+### 19、springBoot定时任务
+```
+1、在启动类上加上@EnableScheduling注解。
+2、编写定时任务类，在类上加上@Component注解，在方法上加上定时计划 @Scheduled(cron="*/6 * * * * ?")
+```
+### 20、favicon（图标）配置
+```
+1、在配置文件中设置，默认为true
+  spring.mvc.favicon.enabled=true
+2、
+```
+### 21、springBoot集成jwt,实现token验证
+```
+1、参考资料：https://www.jianshu.com/p/e88d3f8151db
+```
+
+
+### 22、springBoot全局异常处理
+```
+1、创建全局异常处理类：GlobalException 在类上加上注解 @RestControllerAdvice
+2、创建具体的需要捕获的异常方法：handleBusinessException(BusinessException be) ,在方法上加入注解。
+     @ResponseBody
+        @ExceptionHandler(BusinessException.class)
+        public BaseResponse handleBusinessException(BusinessException be) {
+            logger.warn(be.getMsg());
+            BaseResponse fail = BaseResponse.fail(be.getErrorCode(), be.getMsg());
+            return fail;
+        }   
+```
+
+
+未完待续。。。
+
+
+
+
+
+
+
+
+### 遇到的坑
+```
+1、不能自动建数据库表排查原因我在启动类上加了： @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+2、全局异常处理序列化问题：com.fasterxml.jackson.databind.exc.InvalidDefinitionException ， 在BaseResponse 中放入Object对象会出现这个问题。
 ```
