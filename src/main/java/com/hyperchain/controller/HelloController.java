@@ -12,6 +12,7 @@ package com.hyperchain.controller;
 
 import com.hyperchain.vo.Order;
 import com.hyperchain.vo.PropertyVo;
+import com.hyperchain.vo.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -57,8 +60,8 @@ public class HelloController {
      *
      * @return
      */
-    @RequestMapping(value = "/order/{orderId}", method = RequestMethod.GET)
-    public Order findOrder(@PathVariable("orderId") String orderId) {
+    @RequestMapping(value = "/order/{accessToken}/{orderId}", method = RequestMethod.GET)
+    public Order findOrder(@PathVariable("accessToken") String accessToken, @PathVariable("orderId") String orderId) {
         //通过实体类获取配置文件的值
         Order order = new Order();
         order.setOrderId(orderId);
@@ -71,6 +74,11 @@ public class HelloController {
     }
 
 
+    @RequestMapping(value = "/login")
+    public String login(HttpServletRequest request) {
+        request.getSession().setAttribute("user", new User("xx", "aa"));
+        return "Hello world";
+    }
 
 
 }

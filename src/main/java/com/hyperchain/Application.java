@@ -9,7 +9,7 @@ import org.springframework.cache.annotation.EnableCaching;
 //@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @SpringBootApplication
 //@EnableScheduling     //开启定时任务
-@EnableCaching          //开启缓存
+//@EnableCaching          //开启缓存
 public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 

@@ -39,6 +39,7 @@ public class WebLogAspect {
         }
     }
 
+    //方法处理完成之后执行， 参数就是该方法的返回值
     @AfterReturning(returning = "ret", pointcut = "webLog()")
     public void doAfterReturning(Object ret) throws Throwable {
         // 处理完请求，返回内容

@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
-@Component
-@Order(2)
+//springBoot启动完成之后初始化资源
+//@Component
+//@Order(2)
 public class OrderRunner2 implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(OrderRunner2.class);
     @Override
