@@ -74,7 +74,7 @@ public class ExceptionAdvice {
 //    }
     @ResponseBody
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public BaseResult MethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request, HttpServletResponse response) {
+    public BaseResult MethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         BaseResult baseResult = new BaseResult();
         BindingResult result = ex.getBindingResult();
         if (result.hasErrors()) {

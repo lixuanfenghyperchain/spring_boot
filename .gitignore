@@ -28,3 +28,5 @@ mvnw.cmd
 .DS_Store
 proc/
 /target
+logs
+Tmp_EhCache
