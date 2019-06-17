@@ -10,7 +10,7 @@
  */
 package com.hyperchain.base.exception;
 
-import com.hyperchain.base.response.ResponseCode;
+import com.hyperchain.base.response.ResultCode;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -25,10 +25,10 @@ public class BusinessException extends RuntimeException {
     private String msg;
 
 
-    public BusinessException(ResponseCode responseCode) {
-        super(responseCode.getMsg());
-        this.errorCode = responseCode.getCode();
-        this.msg = responseCode.getMsg();
+    public BusinessException(ResultCode resultCode) {
+        super(resultCode.getMsg());
+        this.errorCode = resultCode.getCode();
+        this.msg = resultCode.getMsg();
     }
 
     public String getErrorCode() {

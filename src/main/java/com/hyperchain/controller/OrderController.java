@@ -10,11 +10,10 @@
  */
 package com.hyperchain.controller;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hyperchain.base.WMap;
 import com.hyperchain.base.exception.BusinessException;
-import com.hyperchain.base.response.BaseResponse;
-import com.hyperchain.base.response.ResponseCode;
+import com.hyperchain.base.response.BaseResult;
+import com.hyperchain.base.response.ResultCode;
 import com.hyperchain.dao.GirlDao;
 import com.hyperchain.dao.GirlRepository;
 import com.hyperchain.vo.Girl;
@@ -23,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -32,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -75,14 +72,14 @@ public class OrderController {
     }
 
     @RequestMapping("/findGirlById")
-    public BaseResponse findGirlById() {
+    public BaseResult findGirlById() {
 //        return girlDao.findGirlById("44");
-        return BaseResponse.success(ResponseCode.SUCCESS, girlRepository.findGirlById(44));
+        return BaseResult.success(ResultCode.SUCCESS, girlRepository.findGirlById(44));
     }
 
 
     @RequestMapping("/findOrders")
-    public BaseResponse findOrders() {
+    public BaseResult findOrders() {
         List<Order> orderList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             Order order = new Order();
@@ -91,21 +88,21 @@ public class OrderController {
             order.setAddress("四川广安");
             orderList.add(order);
         }
-        return BaseResponse.success(ResponseCode.SUCCESS, orderList);
+        return BaseResult.success(ResultCode.SUCCESS, orderList);
     }
 
 
     @RequestMapping("/exception")
-    public BaseResponse exception() {
+    public BaseResult exception() {
         if (1 == 1) {
-            throw new BusinessException(ResponseCode.USER_NOT_EXIT);
+            throw new BusinessException(ResultCode.USER_NOT_EXIT);
         }
-        return BaseResponse.success(ResponseCode.SUCCESS, "你好");
+        return BaseResult.success(ResultCode.SUCCESS, "你好");
     }
 
     @RequestMapping("/testCache")
 //    @Cacheable
-    public BaseResponse testCache() {
+    public BaseResult testCache() {
         Order order = new Order();
         order.setOrderId("22");
         order.setAddress("sichuan");
@@ -114,7 +111,7 @@ public class OrderController {
         System.out.println("hh");
         System.out.println(this.order);
 //{"code":"000000","message":"成功","data":"Order{orderId='null', address='null', name='null', date='null'}"}
-        return BaseResponse.success(ResponseCode.SUCCESS, girlRepository.findGirlById(22));
+        return BaseResult.success(ResultCode.SUCCESS, girlRepository.findGirlById(22));
     }
 
 

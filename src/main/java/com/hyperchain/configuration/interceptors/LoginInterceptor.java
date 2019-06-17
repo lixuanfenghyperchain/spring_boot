@@ -10,17 +10,18 @@
  */
 package com.hyperchain.configuration.interceptors;
 
-import com.hyperchain.vo.User;
+import com.hyperchain.cache.Guava;
+import com.hyperchain.service.TokenService;
+import com.hyperchain.vo.Token;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -32,7 +33,30 @@ import java.util.Map;
  * @since 1.0.0
  */
 @Component
+@Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
+
+    //    @Autowired
+//    private RedisService redisService;
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private Guava guava;
+
+
+    /**
+     *
+     *分别实现预处理、后处理（调用了Service并返回ModelAndView，但未进行页面渲染）、返回处理（已经渲染了页面）
+     *
+     * 1.在preHandle中，可以进行编码、安全控制等处理；
+     * 2.在postHandle中，有机会修改ModelAndView； 3.
+     * 3.afterCompletion中，可以根据ex是否为null判断是否发生了异常，进行日志记录。
+   */
+
+
+
+
 
     //这个方法是在访问接口之前执行的，我们只需要在这里写验证登陆状态的业务逻辑，就可以在用户调用指定接口之前验证登陆状态了
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -42,22 +66,22 @@ public class LoginInterceptor implements HandlerInterceptor {
         //获取方法名
 //        System.out.println(((HandlerMethod) handler).getMethod().getName());
 
-        System.out.println("preHandle 方法");
-        Map<String, String> pathVariables = (Map<String, String>) request
-                .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        String lotCode = pathVariables.get("accessToken");
-        System.out.println("accessToken========" + lotCode);
-        //每一个项目对于登陆的实现逻辑都有所区别，我这里使用最简单的Session提取User来验证登陆。
-        HttpSession session = request.getSession();
-        //这里的User是登陆时放入session的
-        User user = (User) session.getAttribute("user");
-        //如果session中没有user，表示没登陆
-        if (user == null) {
-            //这个方法返回false表示忽略当前请求，如果一个用户调用了需要登陆才能使用的接口，如果他没有登陆这里会直接忽略掉
-            //当然你可以利用response给用户返回一些提示信息，告诉他没登陆
-            return false;
+
+//        获取restful风格的url参数
+//        Map<String, String> pathVariables = (Map<String, String>) request
+//                .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+//        String lotCode = pathVariables.get("accessToken");
+
+        //获取请求头中的token
+
+        String accessToken = request.getHeader("access-token");
+
+        Token token = tokenService.decodeToken(accessToken);
+        String s = (String) guava.get("token:" + token.getUserId());
+        if (null != s) {
+            return true;
         } else {
-            return true;    //如果session里有user，表示该用户已经登陆，放行，用户即可继续调用自己需要的接口
+            return false;
         }
     }
 

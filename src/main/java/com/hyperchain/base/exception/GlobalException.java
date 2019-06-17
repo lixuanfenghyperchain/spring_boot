@@ -10,8 +10,8 @@
  */
 package com.hyperchain.base.exception;
 
-import com.hyperchain.base.response.BaseResponse;
-import com.hyperchain.base.response.ResponseCode;
+import com.hyperchain.base.response.BaseResult;
+import com.hyperchain.base.response.ResultCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,18 +32,18 @@ public class GlobalException {
 
     @ResponseBody
     @ExceptionHandler(BusinessException.class)
-    public BaseResponse handleBusinessException(BusinessException be) {
-        logger.warn(be.getMsg());
-        BaseResponse fail = BaseResponse.fail(be.getErrorCode(), be.getMsg());
+    public BaseResult handleBusinessException(BusinessException be) {
+        logger.warn(be.getMsg(), be);
+        BaseResult fail = BaseResult.fail(false, be.getErrorCode(), be.getMsg());
         return fail;
     }
 
 
     @ResponseBody
     @ExceptionHandler(Exception.class)
-    public BaseResponse Exception(Exception e) {
+    public BaseResult Exception(Exception e) {
         logger.error("系统异常", e);
-        BaseResponse fail = BaseResponse.fail(ResponseCode.DEFAULT_FAIL);
+        BaseResult fail = BaseResult.fail(ResultCode.DEFAULT_FAIL);
         return fail;
     }
 }
