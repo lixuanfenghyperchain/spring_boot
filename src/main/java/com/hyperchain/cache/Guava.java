@@ -14,14 +14,10 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.hyperchain.service.RedisService;
-import com.hyperchain.vo.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -38,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class Guava {
 
+    // 在需要的地方 直接注解引入，则将从缓存中数据数据，如果缓存中没有则将从redis中获取
     @Autowired
     private RedisService redisService;
 
@@ -50,7 +47,7 @@ public class Guava {
                     log.info("从redis中获取数据");
                     Object o = redisService.get(s);
                     if (o == null) {
-                        o = false;
+                        o = new Object();
                     }
                     return o;
                 }
@@ -63,20 +60,5 @@ public class Guava {
             e.printStackTrace();
         }
         return null;
-    }
-
-
-    public Guava() {
-        log.info("调用构造方法");
-    }
-
-    @PostConstruct  //在构造方法后执行
-    public void init() {
-        log.info("spring 容器初始化该类");
-    }
-
-    @PreDestroy  //对单列有效
-    public void destory() {
-        log.info("spring 容器摧毁该类");
     }
 }

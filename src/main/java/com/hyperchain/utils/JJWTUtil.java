@@ -75,7 +75,5 @@ public class JJWTUtil {
         String role = (String) claims.get("role");
         Token token = new Token(userId, userName, 11111L, 11111L, role);
         return token;
-
     }
-
 }

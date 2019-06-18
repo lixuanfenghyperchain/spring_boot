@@ -36,8 +36,6 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
 
-    //    @Autowired
-//    private RedisService redisService;
     @Autowired
     private TokenService tokenService;
 

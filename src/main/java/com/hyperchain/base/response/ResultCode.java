@@ -6,6 +6,7 @@ public enum ResultCode {
     SUCCESS(true, "000000", "成功"),
     USER_NOT_EXIT(true, "000001", "用户不存在"),
     DEFAULT_FAIL(false, "999999", "系统异常"),
+    FILE_EMPTY(false, "000006", "文件为空"),
 
     TOKEN_PARSER_ERROR(false, "000003", "token解析异常"),
     TOKEN_TIMOUT_ERROR(false, "000004", "token超时"),
@@ -46,5 +47,14 @@ public enum ResultCode {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    @Override
+    public String toString() {
+        return "ResultCode{" +
+                "isSuccess=" + isSuccess +
+                ", code='" + code + '\'' +
+                ", msg='" + msg + '\'' +
+                '}';
     }
 }

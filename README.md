@@ -324,8 +324,68 @@ Spring Boot默认提供静态资源目录位置需置于classpath下，目录名
 举例：我们可以在src/main/resources/目录下创建static，在该位置放置一个图片文件。启动程序后，尝试访问http://localhost:8080/D.jpg。如能显示图片，配置成功。
 ```
 
+### 25、SpringBoot+Redis分布式Session解决方案
+```
+##  前言
 
+场景：
+当我们项目应用搭建了集群，就会产生session共享问题。因为session是保存在服务器上面的。
+解决方案：
+a.通过nginx的负载均衡其中一种ip绑定来实现（通过ip绑定服务器其中一台，就没有集群概念了）；
+b.通过cookie备份session实现(因为cookie数据保存在客户端，所以不安全);
+c.通过redis备份session实现（可靠）；
+## SpringBoot+springsession+redis来实现session共享 
+注意：在此之前你要搭建redis服务端 
+ 1、pom引入
+        <!--redis-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!--全局session-->
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+        </dependency>
+ 2、配置文件配置
+spring.redis.database=2
+spring.redis.host=127.0.0.1
+spring.redis.port=6379
+spring.redis.password=
+spring.redis.ssl=false
+spring.redis.jedis.pool.max-active=100
+spring.redis.jedis.pool.max-wait=
+# 连接池中的最大空闲连接
+spring.redis.jedis.pool.max-idle=8
+# 连接池中的最小空闲连接
+spring.redis.jedis.pool.min-idle=0
+# 连接超时时间（毫秒）
+spring.redis.timeout=
+spring.session.store-type=redis
 
+3、编写controller
+   @RequestMapping(value = "/session")
+    public BaseResult session(HttpServletRequest request) {
+        String userId = (String) request.getSession().getAttribute("userId");
+        if (StringUtils.isEmpty(userId)) {
+            log.info("用户session_id为空！");
+            request.getSession().setAttribute("userId", "001_lxf");
+        } else {
+            log.info("用户session_id:" + userId);
+        }
+        return BaseResult.success(ResultCode.SUCCESS, userId);
+    }
+4、maven 打包项目
+mvn clean package -Dmaven.skip.test=true
+5、启动项目2次，分别用不同的端口
+进入target目录启动项目，指定不同的端口
+java -jar xxx_xxx.jar --server.port=8080
+java -jar xxx_xxx.jar --server.port=8081
+6、效果演示
+分别访问，查看效果：
+http://127.0.0.1:8080/user/session
+http://127.0.0.1:8081/user/session
+```
 
 
 

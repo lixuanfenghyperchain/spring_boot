@@ -15,9 +15,13 @@ import com.hyperchain.base.response.ResultCode;
 import com.hyperchain.cache.Guava;
 import com.hyperchain.service.RedisService;
 import com.hyperchain.service.TokenService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -31,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/user")
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -66,5 +71,17 @@ public class UserController {
             return BaseResult.fail(ResultCode.USERNAME_OR_PASSWORD_ERROR);
 
         }
+    }
+
+    @RequestMapping(value = "/session")
+    public BaseResult session(HttpServletRequest request) {
+        String userId = (String) request.getSession().getAttribute("userId");
+        if (StringUtils.isEmpty(userId)) {
+            log.info("用户session_id为空！");
+            request.getSession().setAttribute("userId", "001_lxf");
+        } else {
+            log.info("用户session_id:" + userId);
+        }
+        return BaseResult.success(ResultCode.SUCCESS, userId);
     }
 }

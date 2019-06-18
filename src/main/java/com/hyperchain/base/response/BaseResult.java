@@ -105,4 +105,14 @@ public class BaseResult<T> implements Closeable {
     public void setSuccess(Boolean success) {
         isSuccess = success;
     }
+
+    @Override
+    public String toString() {
+        return "BaseResult{" +
+                "isSuccess=" + isSuccess +
+                ", code='" + code + '\'' +
+                ", message='" + message + '\'' +
+                ", data=" + data +
+                '}';
+    }
 }

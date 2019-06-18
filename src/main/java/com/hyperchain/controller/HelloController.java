@@ -16,7 +16,6 @@ import com.hyperchain.vo.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,8 +36,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/hello")
 public class HelloController {
 
-
-    JdbcTemplate jdbcTemplate;
     private static final Logger logger = LoggerFactory.getLogger(HelloController.class);
     @Autowired
     private PropertyVo propertyVo;
@@ -49,7 +46,7 @@ public class HelloController {
      *
      * @return
      */
-    @RequestMapping(value = "/getHello")
+    @RequestMapping(value = "/getHello.do")
     public String Hello() {
         return "Hello world";
     }
