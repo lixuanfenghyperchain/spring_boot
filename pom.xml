@@ -105,11 +105,11 @@
         </dependency>
 
         <!-- 热部署 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-devtools</artifactId>-->
+            <!--<optional>true</optional>-->
+        <!--</dependency>-->
 
         <!--添加二维码生成相关的jar包-->
         <dependency>
@@ -168,6 +168,13 @@
             <artifactId>jjwt</artifactId>
             <version>0.6.0</version>
         </dependency>
+        <!--webservice-->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+            <version>3.2.4</version>
+        </dependency>
+
     </dependencies>
 
 

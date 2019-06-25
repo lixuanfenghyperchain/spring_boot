@@ -47,7 +47,6 @@ public class BookController {
         Map bookById = bookRepository.findBookById("2c90e5286513be21016513be3b870002");
         System.out.println(bookById);
         return bookById;
-
     }
 
     @RequestMapping(value = "/getBookByName", method = RequestMethod.POST)
