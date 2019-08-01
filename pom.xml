@@ -106,9 +106,9 @@
 
         <!-- 热部署 -->
         <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-devtools</artifactId>-->
-            <!--<optional>true</optional>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-devtools</artifactId>-->
+        <!--<optional>true</optional>-->
         <!--</dependency>-->
 
         <!--添加二维码生成相关的jar包-->
@@ -174,7 +174,12 @@
             <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
             <version>3.2.4</version>
         </dependency>
-
+        <!--httpclient-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.5</version>
+        </dependency>
     </dependencies>
 
 

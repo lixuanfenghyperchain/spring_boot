@@ -11,6 +11,7 @@
 package com.hyperchain.javase.comparator_comparable;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -103,7 +104,7 @@ public class Person implements Comparable<Person> {
 
         //使用内部外部比较器 使用lambda表达式
 
-//        Collections.sort(personList, (o1, o2) -> Double.compare(o1.getSalary(), o2.getSalary()));
+        Collections.sort(personList, (o1, o2) -> Double.compare(o1.getSalary(), o2.getSalary()));
 
         // 使用Stream Api  进行内部排序，然后再转集合
 //        List<Person> collect = personList.stream().sorted().collect(Collectors.toList());
