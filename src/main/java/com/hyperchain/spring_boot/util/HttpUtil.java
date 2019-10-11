@@ -32,13 +32,13 @@ public class HttpUtil {
 
 
     public static void doGet(String url) {
-        String body = "";
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet httpGet = new HttpGet(url);
         try {
             HttpResponse httpResponse = httpClient.execute(httpGet);
             HttpEntity entity = httpResponse.getEntity();
             String s = EntityUtils.toString(entity, Consts.UTF_8);
+            System.out.println(s);
             httpGet.releaseConnection();
         } catch (IOException e) {
             e.printStackTrace();

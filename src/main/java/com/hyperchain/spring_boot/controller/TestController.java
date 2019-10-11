@@ -12,6 +12,7 @@ package com.hyperchain.spring_boot.controller;
 
 import com.hyperchain.spring_boot.aop.annotation.Permission;
 import com.hyperchain.spring_boot.aop.annotation.UserAccess;
+import com.hyperchain.spring_boot.validation.LoginForm;
 import com.hyperchain.spring_boot.vo.BaseResult;
 import com.hyperchain.spring_boot.vo.MyProperty;
 import io.swagger.annotations.Api;
@@ -20,10 +21,13 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +93,21 @@ public class TestController {
     }
 
 
-
+    @RequestMapping(value = "/login.json", method = RequestMethod.POST)
+    public BaseResult login(@Valid LoginForm loginForm, BindingResult bindingResult) {
+        BaseResult baseResult = new BaseResult();
+        if (bindingResult.hasErrors()) {
+            for (ObjectError error : bindingResult.getAllErrors()) {
+                baseResult.setCode(0);
+                baseResult.setMessage("参数交易错误");
+                baseResult.setData(error.getDefaultMessage());
+                return baseResult;
+            }
+        }
+        baseResult.setCode(1);
+        baseResult.setMessage("查询成功！");
+        return baseResult;
+    }
 
 
     //获取自定义配置文件的值

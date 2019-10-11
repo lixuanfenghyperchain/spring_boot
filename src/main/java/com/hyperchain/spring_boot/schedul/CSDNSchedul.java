@@ -30,9 +30,11 @@ import java.util.concurrent.ExecutorService;
 public class CSDNSchedul {
 
     private static ExecutorService threadPool = SingleThreadPool.getInstance();
+    int i = 0;
 
     @Scheduled(fixedRate = 60 * 1000)
     void doGet() {
+        System.out.println(i++);
         List<String> str = StringConstant.str();
         for (int i = 0; i < str.size(); i++) {
             final int index = i;
